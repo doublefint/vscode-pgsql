@@ -35,13 +35,8 @@ function runFile ( { conn, file, channel, onEnd }) {
     var utcDate = dt.toUTCString();
     channel.appendLine(`---------  ${utcDate}  ---------`)
 
-    const toChannel = data => {
-        const str = data.toString(), lines = str.match( /[^\r\n]+/g )
-        lines.forEach( line => channel.appendLine( line ) )
-    }
-
-    bgtask.stdout.on( 'data', toChannel )
-    bgtask.stderr.on('data', toChannel )
+    bgtask.stdout.on('data', data => channel.append(data) )
+    bgtask.stderr.on('data', data => channel.append(data) )
 
     onEnd = onEnd ? onEnd : ()=>{}
 
